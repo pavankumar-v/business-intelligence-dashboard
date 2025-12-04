@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sidebar";
 import { DualToneDashboardIcon } from "@/components/icons/main";
 import { useState } from "react";
+import NavLogo from "./nav-logo";
 
 export type NavItemType = {
   title: string;
@@ -38,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       {/* head */}
       <SidebarHeader>
-        <div className="text-lg font-semibold">Business Intelligence</div>
+        <NavLogo />
       </SidebarHeader>
 
       {/* links */}
