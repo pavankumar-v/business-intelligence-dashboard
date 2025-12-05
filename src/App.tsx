@@ -4,6 +4,7 @@ import { TypographyH1 } from "./components/ui/typography";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
+import { ThemeProvider } from "./context/theme-context";
 
 function App() {
   const USDollar = new Intl.NumberFormat("en-US", {
@@ -12,6 +13,7 @@ function App() {
   });
   return (
     <QueryClientProvider client={queryClient}>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <DashboardLayout>
         <>
           <TypographyH1>
@@ -23,6 +25,7 @@ function App() {
         </>
       </DashboardLayout>
     </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
