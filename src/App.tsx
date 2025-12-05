@@ -1,9 +1,7 @@
 import DashboardLayout from "./components/layout/dashboard-layout";
 import KpiSection from "./components/kpis/kpi-section";
 import { TypographyH1 } from "./components/ui/typography";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import { useQuery } from "@tanstack/react-query";
 import { ThemeProvider } from "./context/theme-context";
 
 function App() {
@@ -12,7 +10,6 @@ function App() {
     currency: "USD",
   });
   return (
-    <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <DashboardLayout>
         <>
@@ -24,7 +21,6 @@ function App() {
           <KpiSection />
         </>
       </DashboardLayout>
-    </QueryClientProvider>
     </ThemeProvider>
   );
 }
