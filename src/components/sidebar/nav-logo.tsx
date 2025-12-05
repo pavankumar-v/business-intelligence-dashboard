@@ -9,7 +9,7 @@ const NavLogo = () => {
     <SidebarMenu>
       <SidebarMenuItem className="flex items-center mt-2 px-1">
         <img src={logo} alt="Logo" className="h-6 w-6" />
-        {!sidebar.isMobile && sidebar.state === "expanded" && (
+        {sidebar.state === "expanded" && (
           <span className="ml-2 font-semibold whitespace-nowrap">
             Business Intelligence
           </span>

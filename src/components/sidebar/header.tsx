@@ -1,5 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "../ui/button";
+import { Upload } from "lucide-react";
 
 const Header = () => {
   return (
@@ -14,7 +16,10 @@ const Header = () => {
         </div>
 
         <div className="flex gap-2 items-center justify-between">
-          {/* <Profile /> */}
+          <Button variant="safe">
+            <Upload />
+            Upload Transactions
+          </Button>
         </div>
       </div>
     </header>

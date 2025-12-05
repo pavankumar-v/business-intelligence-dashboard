@@ -1,18 +1,21 @@
 import DashboardLayout from "./components/layout/dashboard-layout";
-
-import { TypographyH4 } from "./components/ui/typography";
+import KpiSection from "./components/kpis/kpi-section";
+import { TypographyH1 } from "./components/ui/typography";
 
 function App() {
+  const USDollar = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
   return (
     <DashboardLayout>
       <>
-        <TypographyH4
-          className="mb-4"
-          indicatorColor="bg-orange-200"
-          withIndicator
-        >
-          Overview
-        </TypographyH4>
+        <TypographyH1>
+          Total Spendings <br />
+          {USDollar.format(1234567.89)}
+        </TypographyH1>
+
+        <KpiSection />
       </>
     </DashboardLayout>
   );
