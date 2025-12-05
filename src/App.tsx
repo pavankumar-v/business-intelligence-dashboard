@@ -1,16 +1,28 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { Button } from "./components/ui/button";
+import DashboardLayout from "./components/layout/dashboard-layout";
+import KpiSection from "./components/kpis/kpi-section";
+import { TypographyH1 } from "./components/ui/typography";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
-  const [count, setCount] = useState(0);
-
+  const USDollar = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
   return (
-    <>
-      <Button>Button</Button>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <DashboardLayout>
+        <>
+          <TypographyH1>
+            Total Spendings <br />
+            {USDollar.format(1234567.89)}
+          </TypographyH1>
+
+          <KpiSection />
+        </>
+      </DashboardLayout>
+    </QueryClientProvider>
   );
 }
 
