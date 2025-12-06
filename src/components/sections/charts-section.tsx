@@ -14,7 +14,7 @@ const ChartsSection = ({
 }) => {
   return (
     <Card>
-      <TypographyH3 indicatorColor="bg-green-200" withIndicator>
+      <TypographyH3 indicatorColor="bg-accent-indicator-green" withIndicator>
         Charts
       </TypographyH3>
 

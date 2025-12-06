@@ -23,7 +23,7 @@ const KpiSection = () => {
   // Queries
   return (
     <Card>
-      <TypographyH3 indicatorColor="bg-orange-200" withIndicator>
+      <TypographyH3 indicatorColor="bg-accent-indicator-orange" withIndicator>
         Metrics
       </TypographyH3>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 bg-accent p-2 rounded-xl">
@@ -38,7 +38,7 @@ const KpiSection = () => {
                 alt="Claude"
                 className="w-9 h-9 left-[-14px] top-[-5px] rounded-md bg-accent p-2"
               />
-              <span className="text-[2.2rem] font-semibold">
+              <span className="text-[2.2rem] font-semibold text-text">
                 {metrics?.highest_model_used}
               </span>
             </div>
@@ -53,7 +53,7 @@ const KpiSection = () => {
           icon={<User className="w-4 h-4 text-purple-400" />}
         >
           <div className="flex flex-col">
-            <span className="text-5xl font-semibold">
+            <span className="text-5xl font-semibold text-text">
               {Number(metrics?.active_subscriber_utilization_rate.toFixed(2))} %
             </span>
             <TypographyMuted className="text-md text-gray-400">
@@ -68,7 +68,7 @@ const KpiSection = () => {
           icon={<Coins className="w-4 h-4 text-yellow-500" />}
         >
           <div className="flex flex-col">
-            <span className="text-5xl font-semibold">
+            <span className="text-5xl font-semibold text-text">
               {new Intl.NumberFormat().format(
                 metrics?.avg_token_consumption_per_day || 0
               )}
