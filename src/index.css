@@ -49,6 +49,7 @@
   --accent-purple-subtle: oklch(0.634 0.1797 274.43);
   --accent-indicator-green: var(--color-green-200);
   --accent-indicator-orange: var(--color-orange-200);
+  --accent-indicator-purple: var(--color-purple-200);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
@@ -88,6 +89,7 @@
   --accent-foreground: oklch(0.985 0 0);
   --accent-indicator-green: var(--color-green-300);
   --accent-indicator-orange: var(--color-orange-300);
+  --accent-indicator-purple: var(--color-purple-300);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -131,6 +133,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-indicator-green: var(--accent-indicator-green);
   --color-accent-indicator-orange: var(--accent-indicator-orange);
+  --color-accent-indicator-purple: var(--accent-indicator-purple);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);

@@ -3,24 +3,11 @@ import { TypographyH3, TypographyMuted } from "../ui/typography";
 import KPICard from "./kpi-card";
 import claudeLogo from "../../assets/claude.png";
 import { Card } from "../ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { kpiMetrics } from "@/services/metrics.service";
+import { useMetrics } from "@/context/metrics-context";
 
 const KpiSection = () => {
-  const { data: metrics } = useQuery({
-    queryKey: ["metrics"],
-    queryFn: () =>
-      kpiMetrics({
-        regions: ["EU"],
-        start_date: "2024-01-01",
-        end_date: "2024-03-31",
-      }),
-  });
-  // const queryClient = useQueryClient()
+  const { metrics } = useMetrics();
 
-  console.log(metrics);
-
-  // Queries
   return (
     <Card>
       <TypographyH3 indicatorColor="bg-accent-indicator-orange" withIndicator>
