@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Earth } from "lucide-react";
 
 export function RegionFilterDropdown() {
   const { filters, setFilters } = useMetrics();
@@ -44,7 +45,8 @@ export function RegionFilterDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="gap-2">
+          <Earth className="mr-2 h-4 w-4 text-primary" />
           Change Region
           {selectedCount > 0 && (
             <span className="ml-2 text-xs text-muted-foreground">

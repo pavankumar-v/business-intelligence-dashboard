@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { Calendars, ChevronDownIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +30,7 @@ export function DateRangeFilter() {
             id="date"
             className="w-48 justify-between font-normal"
           >
+            <Calendars className="mr-2 h-4 w-4 text-purple-500" />
             {dateRange?.from
               ? dateRange.from.toLocaleDateString()
               : "Select date"}
