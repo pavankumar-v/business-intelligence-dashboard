@@ -23,6 +23,10 @@ export type KpiMetricsResponse = {
     region: string;
     spends: number;
   }[];
+  cost_distribution_by_model: {
+    mode: string;
+    cost: number;
+  }[];
 };
 
 export type RequestResponse<T> = {

@@ -7,9 +7,10 @@ import { Skeleton } from "../ui/skeleton";
 
 const ChartsSection = () => {
   const { metrics, isLoading } = useMetrics();
+
   return (
-    <div className="flex gap-2 w-full">
-      <Card className="w-[70%]">
+    <div className="flex flex-col lg:flex-row w-full gap-2">
+      <Card className="w-full lg:w-[70%]">
         <TypographyH3 indicatorColor="bg-accent-indicator-green" withIndicator>
           Spends Trend
         </TypographyH3>
@@ -22,7 +23,8 @@ const ChartsSection = () => {
           <ChartLineDefault chartData={metrics.spends_trend} />
         )}
       </Card>
-      <Card>
+
+      <Card className="w-full lg:w-[30%]">
         <TypographyH3 indicatorColor="bg-accent-indicator-purple" withIndicator>
           Region Wise
         </TypographyH3>

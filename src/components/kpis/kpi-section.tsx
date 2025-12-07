@@ -9,11 +9,11 @@ const KpiSection = () => {
   const { metrics } = useMetrics();
 
   return (
-    <Card>
+    <Card className="w-full lg:w-[70%]">
       <TypographyH3 indicatorColor="bg-accent-indicator-orange" withIndicator>
         Metrics
       </TypographyH3>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 bg-accent p-2 rounded-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 bg-accent p-2 rounded-xl">
         <KPICard
           title="Top Model Used"
           icon={<BotMessageSquare className="w-4 h-4" />}

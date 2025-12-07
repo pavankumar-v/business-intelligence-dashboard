@@ -4,6 +4,7 @@ import { TypographyH1, TypographyH3 } from "./components/ui/typography";
 import ChartsSection from "./components/sections/charts-section";
 import { ThemeProvider } from "./context/theme-context";
 import { MetricsProvider, useMetrics } from "./context/metrics-context";
+import { ModelWiseBarGraph } from "./components/charts/model-wise-bar-graph";
 
 function DashboardContent() {
   const { metrics } = useMetrics();
@@ -20,7 +21,12 @@ function DashboardContent() {
         <TypographyH1 className="">
           {USDollar.format(metrics?.total_cost || 0)}
         </TypographyH1>
-        <KpiSection />
+
+        <div className="flex flex-col lg:flex-row w-full gap-2">
+          <KpiSection />
+          <ModelWiseBarGraph />
+        </div>
+
         <ChartsSection />
       </>
     </DashboardLayout>
