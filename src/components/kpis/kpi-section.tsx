@@ -1,12 +1,17 @@
-import { BotMessageSquare, Coins, User } from "lucide-react";
+import { BotMessageSquare, Coins, DollarSign, User } from "lucide-react";
 import { TypographyH3, TypographyMuted } from "../ui/typography";
 import KPICard from "./kpi-card";
 import { Card } from "../ui/card";
 import { useMetrics } from "@/context/metrics-context";
 import ModelLogo from "../utils/model-logo";
+import { USDollar } from "@/lib/utils";
 
 const KpiSection = () => {
   const { metrics } = useMetrics();
+
+  if (!metrics) {
+    return <p>Error Loading Metrics</p>;
+  }
 
   return (
     <Card className="w-full lg:w-[70%]">
@@ -21,8 +26,8 @@ const KpiSection = () => {
           <div className="flex flex-col">
             <div className="flex items-center gap-2 relative capitalize">
               <ModelLogo name={metrics?.highest_model_used || ""} />
-              <span className="text-[2.2rem] font-semibold text-text">
-                {metrics?.highest_model_used}
+              <span className="text-[2.5rem] font-medium text-text">
+                {metrics.highest_model_used}
               </span>
             </div>
             <TypographyMuted className="text-md text-gray-400 flex items-center gap-2">
@@ -32,32 +37,51 @@ const KpiSection = () => {
         </KPICard>
 
         <KPICard
-          title="Active Sub Utilzation"
-          icon={<User className="w-4 h-4 text-purple-400" />}
+          title="Avg Token Comsumption"
+          icon={<Coins className="w-4 h-4 text-yellow-500" />}
         >
           <div className="flex flex-col">
-            <span className="text-5xl font-semibold text-text">
-              {Number(metrics?.active_subscriber_utilization_rate.toFixed(2))} %
+            <span className="text-5xl font-medium text-text">
+              {new Intl.NumberFormat().format(
+                metrics.avg_token_consumption_per_day
+              )}
             </span>
             <TypographyMuted className="text-md text-gray-400">
-              {Number(metrics?.active_subscriber_utilization_rate.toFixed(2))}%
-              Of active subscribers use per day
+              Tokens utilised per day
             </TypographyMuted>
           </div>
         </KPICard>
 
         <KPICard
-          title="Avg Token Comsumption"
-          icon={<Coins className="w-4 h-4 text-yellow-500" />}
+          title="Average Spendings"
+          icon={<DollarSign className="w-4 h-4 text-green-400" />}
         >
           <div className="flex flex-col">
-            <span className="text-5xl font-semibold text-text">
-              {new Intl.NumberFormat().format(
-                metrics?.avg_token_consumption_per_day || 0
-              )}
+            <span className="text-5xl font-medium text-text">
+              {USDollar.format(metrics.avg_spending_per_day || 0)}
             </span>
             <TypographyMuted className="text-md text-gray-400">
-              Tokens utilised per day
+              avgerage spending per day
+            </TypographyMuted>
+          </div>
+        </KPICard>
+
+        <KPICard
+          title="Active Sub Utilzation"
+          icon={<User className="w-4 h-4 text-purple-400" />}
+        >
+          <div className="flex flex-col">
+            <span className="text-5xl font-medium text-text">
+              {Number(
+                (metrics.active_subscriber_utilization_rate * 100).toFixed(2)
+              )}{" "}
+              %
+            </span>
+            <TypographyMuted className="text-md text-gray-400">
+              {Number(
+                (metrics.active_subscriber_utilization_rate * 100).toFixed(2)
+              )}
+              % Of active subscribers use per day
             </TypographyMuted>
           </div>
         </KPICard>
