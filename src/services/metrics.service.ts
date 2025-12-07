@@ -18,7 +18,7 @@ export type KpiMetricsResponse = {
   spends_trend: {
     date: string;
     cost: number;
-  };
+  }[];
 };
 
 export type RequestResponse<T> = {
