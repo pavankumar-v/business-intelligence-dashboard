@@ -17,44 +17,61 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useMetrics } from "@/hooks/use-metrics";
+import { COUNTRIES } from "@/lib/constants";
 
-export const description = "A pie chart with a label";
+export const description = "A pie chart showing region wise spends";
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
-];
+const countryToColorMap: Record<string, string> = {
+  Japan: "var(--color-japan)",
+  India: "var(--color-india)",
+  "United States": "var(--color-united-states)",
+  "European Union": "var(--color-european-union)",
+  Canada: "var(--color-canada)",
+  Australia: "var(--color-australia)",
+};
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "var(--chart-1)",
-  },
-  safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "var(--chart-3)",
-  },
-  edge: {
-    label: "Edge",
-    color: "var(--chart-4)",
-  },
-  other: {
-    label: "Other",
-    color: "var(--chart-5)",
-  },
-} satisfies ChartConfig;
+const regionToNameMap = COUNTRIES.reduce((acc, country) => {
+  acc[country.code] = country.name;
+  return acc;
+}, {} as Record<string, string>);
 
 export function RegionWiseDistribution() {
+  const { metrics, isLoading } = useMetrics();
+
+  if (isLoading || !metrics) {
+    return (
+      <Card className="flex flex-col p-0">
+        <CardHeader className="items-center p-0">
+          <CardTitle>Region Wise Spends</CardTitle>
+          <CardDescription>January - June 2024</CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1 pb-0">
+          <div className="flex items-center justify-center h-[250px]">
+            Loading...
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const chartData =
+    metrics.region_wise_spends?.map((spend) => ({
+      country: regionToNameMap[spend.region] || spend.region,
+      spends: spend.spends,
+      fill:
+        countryToColorMap[regionToNameMap[spend.region] || spend.region] ||
+        "#ccc",
+    })) || [];
+
+  const chartConfig: ChartConfig = {};
+  COUNTRIES.forEach((country) => {
+    chartConfig[country.name] = {
+      label: country.name,
+      color: countryToColorMap[country.name] || "#ccc",
+    };
+  });
+
   return (
     <Card className="flex flex-col p-0">
       <CardHeader className="items-center p-0">
@@ -67,8 +84,8 @@ export function RegionWiseDistribution() {
           className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[250px] pb-0"
         >
           <PieChart>
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" label nameKey="browser" />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Pie data={chartData} dataKey="spends" label nameKey="country" />
           </PieChart>
         </ChartContainer>
       </CardContent>
@@ -77,7 +94,7 @@ export function RegionWiseDistribution() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
+          Showing total spends for the last period
         </div>
       </CardFooter>
     </Card>

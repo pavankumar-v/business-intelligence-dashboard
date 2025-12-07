@@ -11,7 +11,7 @@ const ChartsSection = () => {
     <div className="flex gap-2 w-full">
       <Card className="w-[70%]">
         <TypographyH3 indicatorColor="bg-accent-indicator-green" withIndicator>
-          Charts
+          Spends Trend
         </TypographyH3>
 
         {isLoading ? (
@@ -24,7 +24,7 @@ const ChartsSection = () => {
       </Card>
       <Card>
         <TypographyH3 indicatorColor="bg-accent-indicator-purple" withIndicator>
-          Company Wise
+          Region Wise
         </TypographyH3>
 
         <RegionWiseDistribution />
