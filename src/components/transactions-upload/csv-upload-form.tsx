@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, XIcon, Loader2 } from "lucide-react";
+import { Upload, XIcon, Loader2, UploadIcon } from "lucide-react";
 import prettyBytes from "pretty-bytes";
 import { ErrorCode } from "react-dropzone";
 import { useForm } from "react-hook-form";
@@ -12,8 +12,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,8 +20,10 @@ import {
 import {
   Dropzone,
   DropzoneDescription,
+  DropzoneGroup,
   DropzoneInput,
   DropzoneTitle,
+  DropzoneUploadIcon,
   DropzoneZone,
 } from "@/components/ui/dropzone";
 import {
@@ -46,7 +46,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { uploadCsv } from "@/services/metrics.service";
-import { TypographyH3 } from "../ui/typography";
+import {
+  TypographyH3,
+  TypographyMuted,
+  TypographySmall,
+} from "../ui/typography";
 
 // 10 MB max file size
 const MAX_FILE_SIZE = 10e6;
@@ -94,7 +98,7 @@ export function CsvUploadForm() {
         description:
           "Your CSV files have been uploaded and are being processed.",
         position: "top-center",
-        duration: Infinity, // Don't auto close
+        duration: 10000,
       });
 
       // Reset form and close modal
@@ -133,7 +137,7 @@ export function CsvUploadForm() {
       </DialogTrigger>
       <DialogContent className="max-w-4xl rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="mb-2">
+          <DialogTitle className="mb-2 flex items-center gap-2">
             <TypographyH3 withIndicator>
               Upload Transactions & Users
             </TypographyH3>
@@ -142,6 +146,7 @@ export function CsvUploadForm() {
             Upload your transactions and users CSV files to process the data.
           </DialogDescription>
         </DialogHeader>
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -149,153 +154,93 @@ export function CsvUploadForm() {
           >
             {/* Side by side dropzones */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Transactions CSV Upload */}
-              <Dropzone
-                maxSize={MAX_FILE_SIZE}
-                accept={{ "text/csv": [".csv"] }}
-                multiple={false}
-                onDropAccepted={(acceptedFiles) => {
-                  if (acceptedFiles[0]) {
-                    form.setValue("transactions", acceptedFiles[0]);
-                  }
-                }}
-                onDropRejected={(fileRejections) => {
-                  fileRejections.forEach((fileRejection) => {
-                    if (
-                      fileRejection.errors.some(
-                        (err) => err.code === ErrorCode.FileTooLarge
-                      )
-                    ) {
-                      toast.error("File size too large.", {
-                        description: `File '${
-                          fileRejection.file.name
-                        }' exceeds ${prettyBytes(MAX_FILE_SIZE)}.`,
-                        position: "top-center",
-                      });
-                    } else if (
-                      fileRejection.errors.some(
-                        (err) => err.code === ErrorCode.FileInvalidType
-                      )
-                    ) {
-                      toast.error("Invalid file type.", {
-                        description: "Only CSV files are allowed.",
-                        position: "top-center",
-                      });
-                    }
-                  });
-                }}
-              >
-                {({ maxSize }) => (
-                  <FormField
-                    control={form.control}
-                    name="transactions"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Transactions CSV</FormLabel>
-                        <DropzoneZone className="flex justify-center border min-h-[120px]">
-                          <FormControl>
-                            <DropzoneInput
-                              disabled={field.disabled || isUploading}
-                              name={field.name}
-                              onBlur={field.onBlur}
-                              ref={field.ref}
-                            />
-                          </FormControl>
-                          <div className="flex flex-col items-center gap-3">
-                            <Upload className="h-8 w-8" />
-                            <div className="grid gap-0.5 text-center">
-                              <DropzoneTitle className="text-sm">
-                                Drop file here
-                              </DropzoneTitle>
-                              <DropzoneDescription className="text-xs">
-                                {`Max: ${prettyBytes(maxSize ?? 0)}`}
-                              </DropzoneDescription>
-                            </div>
-                          </div>
-                        </DropzoneZone>
-                        <FormDescription className="text-xs">
-                          Drag and drop or click to browse
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
-              </Dropzone>
+              <FormField
+                control={form.control}
+                name="transactions"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold">
+                      Transactions CSV
+                    </FormLabel>
 
-              {/* Users CSV Upload */}
-              <Dropzone
-                maxSize={MAX_FILE_SIZE}
-                accept={{ "text/csv": [".csv"] }}
-                multiple={false}
-                onDropAccepted={(acceptedFiles) => {
-                  if (acceptedFiles[0]) {
-                    form.setValue("users", acceptedFiles[0]);
-                  }
-                }}
-                onDropRejected={(fileRejections) => {
-                  fileRejections.forEach((fileRejection) => {
-                    if (
-                      fileRejection.errors.some(
-                        (err) => err.code === ErrorCode.FileTooLarge
-                      )
-                    ) {
-                      toast.error("File size too large.", {
-                        description: `File '${
-                          fileRejection.file.name
-                        }' exceeds ${prettyBytes(MAX_FILE_SIZE)}.`,
-                        position: "top-center",
-                      });
-                    } else if (
-                      fileRejection.errors.some(
-                        (err) => err.code === ErrorCode.FileInvalidType
-                      )
-                    ) {
-                      toast.error("Invalid file type.", {
-                        description: "Only CSV files are allowed.",
-                        position: "top-center",
-                      });
-                    }
-                  });
-                }}
-              >
-                {({ maxSize }) => (
-                  <FormField
-                    control={form.control}
-                    name="users"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Users CSV</FormLabel>
-                        <DropzoneZone className="flex justify-center border min-h-[120px]">
-                          <FormControl>
-                            <DropzoneInput
-                              disabled={field.disabled || isUploading}
-                              name={field.name}
-                              onBlur={field.onBlur}
-                              ref={field.ref}
-                            />
-                          </FormControl>
-                          <div className="flex flex-col items-center gap-3">
-                            <Upload className="h-8 w-8" />
-                            <div className="grid gap-0.5 text-center">
-                              <DropzoneTitle className="text-sm">
-                                Drop file here
-                              </DropzoneTitle>
-                              <DropzoneDescription className="text-xs">
-                                {`Max: ${prettyBytes(maxSize ?? 0)}`}
-                              </DropzoneDescription>
-                            </div>
-                          </div>
-                        </DropzoneZone>
-                        <FormDescription className="text-xs">
-                          Drag and drop or click to browse
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <Dropzone
+                      accept={{
+                        "text/csv": [".csv"],
+                      }}
+                      multiple={false}
+                      onDropAccepted={(acceptedFiles) => {
+                        if (acceptedFiles[0]) {
+                          form.setValue("transactions", acceptedFiles[0]);
+                        }
+                      }}
+                    >
+                      <DropzoneZone className="border shadow-none rounded-xl">
+                        <DropzoneInput
+                          disabled={field.disabled || isUploading}
+                          name={field.name}
+                        />
+                        <DropzoneGroup className="gap-4">
+                          <UploadIcon className="text-violet-500" />
+                          <DropzoneGroup>
+                            <TypographySmall className="text-center">
+                              Transactions
+                            </TypographySmall>
+                            <TypographyMuted className="text-xs text-center">
+                              You can upload files up to 10MB in size. Supported
+                              formats: CSV.
+                            </TypographyMuted>
+                          </DropzoneGroup>
+                        </DropzoneGroup>
+                      </DropzoneZone>
+                    </Dropzone>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </Dropzone>
+              />
+
+              <FormField
+                control={form.control}
+                name="users"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold">
+                      Users CSV
+                    </FormLabel>
+
+                    <Dropzone
+                      accept={{
+                        "text/csv": [".csv"],
+                      }}
+                      multiple={false}
+                      onDropAccepted={(acceptedFiles) => {
+                        if (acceptedFiles[0]) {
+                          form.setValue("users", acceptedFiles[0]);
+                        }
+                      }}
+                    >
+                      <DropzoneZone className="border shadow-none rounded-xl">
+                        <DropzoneInput
+                          disabled={field.disabled || isUploading}
+                          name={field.name}
+                        />
+                        <DropzoneGroup className="gap-4">
+                          <UploadIcon className="text-green-500" />
+                          <DropzoneGroup>
+                            <TypographySmall className="text-center">
+                              Users
+                            </TypographySmall>
+                            <TypographyMuted className="text-xs text-center">
+                              You can upload files up to 10MB in size. Supported
+                              formats: CSV.
+                            </TypographyMuted>
+                          </DropzoneGroup>
+                        </DropzoneGroup>
+                      </DropzoneZone>
+                    </Dropzone>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* File Lists */}
