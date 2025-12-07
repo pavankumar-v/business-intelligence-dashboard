@@ -32,9 +32,9 @@ export function ModelWiseBarGraph() {
   const { metrics, isLoading } = useMetrics();
 
   const chartData =
-    metrics?.cost_distribution_by_model?.map((item) => ({
+    metrics?.models_metrics?.map((item) => ({
       model: item.model,
-      cost: item.cost,
+      cost: item.total_cost,
     })) || [];
 
   return (

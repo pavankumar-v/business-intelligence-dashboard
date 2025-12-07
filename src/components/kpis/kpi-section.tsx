@@ -7,9 +7,14 @@ import ModelLogo from "../utils/model-logo";
 import { USDollar } from "@/lib/utils";
 
 const KpiSection = () => {
-  const { metrics } = useMetrics();
+  const { metrics, isLoading } = useMetrics();
 
-  if (!metrics) {
+  if (isLoading) {
+    return <p>Loading Metrics</p>;
+  }
+  console.log(metrics);
+
+  if (!metrics || !metrics.kpis) {
     return <p>Error Loading Metrics</p>;
   }
 
@@ -25,9 +30,9 @@ const KpiSection = () => {
         >
           <div className="flex flex-col">
             <div className="flex items-center gap-2 relative capitalize">
-              <ModelLogo name={metrics?.highest_model_used || ""} />
+              <ModelLogo name={metrics.kpis.heighest_model_used || ""} />
               <span className="text-[2.5rem] font-medium text-text">
-                {metrics.highest_model_used}
+                {metrics.kpis.heighest_model_used}
               </span>
             </div>
             <TypographyMuted className="text-md text-gray-400 flex items-center gap-2">
@@ -43,7 +48,7 @@ const KpiSection = () => {
           <div className="flex flex-col">
             <span className="text-5xl font-medium text-text">
               {new Intl.NumberFormat().format(
-                metrics.avg_token_consumption_per_day
+                metrics.kpis.average_token_consumption
               )}
             </span>
             <TypographyMuted className="text-md text-gray-400">
@@ -58,7 +63,7 @@ const KpiSection = () => {
         >
           <div className="flex flex-col">
             <span className="text-5xl font-medium text-text">
-              {USDollar.format(metrics.avg_spending_per_day || 0)}
+              {USDollar.format(metrics.kpis.average_per_day_spending || 0)}
             </span>
             <TypographyMuted className="text-md text-gray-400">
               avgerage spending per day
@@ -72,16 +77,11 @@ const KpiSection = () => {
         >
           <div className="flex flex-col">
             <span className="text-5xl font-medium text-text">
-              {Number(
-                (metrics.active_subscriber_utilization_rate * 100).toFixed(2)
-              )}{" "}
-              %
+              {Number((metrics.kpis.active_sub_utilization * 100).toFixed(2))} %
             </span>
             <TypographyMuted className="text-md text-gray-400">
-              {Number(
-                (metrics.active_subscriber_utilization_rate * 100).toFixed(2)
-              )}
-              % Of active subscribers use per day
+              {Number((metrics.kpis.active_sub_utilization * 100).toFixed(2))}%
+              Of active subscribers use per day
             </TypographyMuted>
           </div>
         </KPICard>

@@ -19,7 +19,7 @@ function DashboardContent() {
       <>
         <TypographyH3 className="leading-none">Total Spendings</TypographyH3>
         <TypographyH1 className="">
-          {USDollar.format(metrics?.total_cost || 0)}
+          {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
         </TypographyH1>
 
         <div className="flex flex-col lg:flex-row w-full gap-2">
@@ -38,9 +38,9 @@ function App() {
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <MetricsProvider
         defaultFilters={{
-          regions: [],
+          regions: ["JP", "EU", "US"],
           start_date: "2024-01-01",
-          end_date: "2024-02-29",
+          end_date: "2024-03-08",
         }}
       >
         <DashboardContent />

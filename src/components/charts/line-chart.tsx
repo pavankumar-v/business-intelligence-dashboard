@@ -17,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useMetrics } from "@/context/metrics-context";
 
 export const description = "A line chart";
 
@@ -27,13 +28,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type Props = {
-  chartData: {
-    date: string;
-    cost: number;
-  }[];
-};
-export function ChartLineDefault({ chartData }: Props) {
+export function SpendsTrendGraph() {
+  const { metrics, isLoading } = useMetrics();
+
+  if (isLoading) {
+    return <p>Loading Metrics</p>;
+  }
+
+  if (!metrics || !metrics.kpis) {
+    return <p>Error Loading Metrics</p>;
+  }
+
   return (
     <Card className="p-0">
       <CardHeader className="p-0">
@@ -44,7 +49,7 @@ export function ChartLineDefault({ chartData }: Props) {
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart
             accessibilityLayer
-            data={chartData}
+            data={metrics.kpis.spends_trend}
             margin={{
               left: 12,
               right: 12,

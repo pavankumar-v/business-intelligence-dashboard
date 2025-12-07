@@ -49,6 +49,7 @@ export function MetricsProvider({
   } = useQuery({
     queryKey: ["metrics", filters],
     queryFn: () => kpiMetrics(filters),
+    staleTime: 5 * 60 * 1000,
   });
 
   const value: MetricsContextState = {

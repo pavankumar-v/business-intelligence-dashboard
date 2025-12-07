@@ -7,25 +7,17 @@ export type MetricsFilter = {
 };
 
 export type KpiMetricsResponse = {
-  highest_model_used: string;
-  avg_spending_per_day: number;
-  costliest_model: string;
-  least_used_model: string;
-  avg_token_consumption_per_day: number;
-  model_efficiency: number;
-  active_subscriber_utilization_rate: number;
-  total_cost: number;
-  spends_trend: {
-    date: string;
-    cost: number;
-  }[];
-  region_wise_spends: {
-    region: string;
-    spends: number;
-  }[];
-  cost_distribution_by_model: {
+  kpis: {
+    total_spendings: string;
+    heighest_model_used: string;
+    average_token_consumption: number;
+    average_per_day_spending: number;
+    active_sub_utilization: number;
+    spends_trend: { date: string; cost: number }[];
+  };
+  models_metrics: {
     model: string;
-    cost: number;
+    total_cost: number;
   }[];
 };
 
@@ -51,6 +43,8 @@ export async function kpiMetrics(filter: MetricsFilter) {
   const res = await api.get<RequestResponse<KpiMetricsResponse>>(
     `/metrics/kpis?${query}`
   );
+
+  console.log(res.data);
 
   return res.data.data;
 }

@@ -1,5 +1,5 @@
 import { useMetrics } from "@/context/metrics-context";
-import { ChartLineDefault } from "../charts/line-chart";
+import { SpendsTrendGraph } from "../charts/line-chart";
 import { RegionWiseDistribution } from "../charts/region-wise-distribution";
 import { Card } from "../ui/card";
 import { TypographyH3 } from "../ui/typography";
@@ -20,7 +20,7 @@ const ChartsSection = () => {
         ) : !metrics ? (
           <p>Error Loading Metrics</p>
         ) : (
-          <ChartLineDefault chartData={metrics.spends_trend} />
+          <SpendsTrendGraph chartData={metrics.kips?.spends_trend} />
         )}
       </Card>
 
