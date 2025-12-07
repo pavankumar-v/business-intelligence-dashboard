@@ -9,9 +9,11 @@ import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
 import { RegionFilterDropdown } from "./components/filters/region-filter-dropdown";
 import { DateRangeFilter } from "./components/filters/date-range-filter";
 import { Toaster } from "sonner";
+import { CsvUploadForm } from "./components/transactions-upload";
+import { Skeleton } from "./components/ui/skeleton";
 
 function DashboardContent() {
-  const { metrics } = useMetrics();
+  const { metrics, isLoading } = useMetrics();
 
   const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -28,11 +30,16 @@ function DashboardContent() {
               Overall Total Spendings
             </TypographyH3>
             <TypographyH1 className="text-5xl font-medium mt-2">
-              {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
+              {isLoading ? (
+                <Skeleton className="h-[66px] w-[200px] rounded-xl bg-background" />
+              ) : (
+                USDollar.format(Number(metrics?.kpis?.total_spendings || 0))
+              )}
             </TypographyH1>
           </div>
 
           <div className="flex items-end gap-2">
+            <CsvUploadForm />
             <DateRangeFilter />
             <RegionFilterDropdown />
           </div>

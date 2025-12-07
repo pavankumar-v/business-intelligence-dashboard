@@ -1,7 +1,6 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "../ui/button";
-import { Upload } from "lucide-react";
+
 import { ModeToggle } from "../theme/mode-toggle";
 
 const Header = () => {
@@ -17,10 +16,10 @@ const Header = () => {
         </div>
 
         <div className="flex gap-2 items-center justify-between">
-          <Button variant="safe">
+          {/* <Button variant="safe">
             <Upload />
             Upload Transactions
-          </Button>
+          </Button> */}
           <ModeToggle />
         </div>
       </div>

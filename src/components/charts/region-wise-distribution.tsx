@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/chart";
 import { useMetrics } from "@/hooks/use-metrics";
 import { COUNTRIES } from "@/lib/constants";
+import { formatDateRange } from "@/lib/utils";
 
 export const description = "A pie chart showing region wise spends";
 
@@ -36,7 +37,7 @@ const regionToNameMap = COUNTRIES.reduce((acc, country) => {
 }, {} as Record<string, string>);
 
 export function RegionWiseDistribution() {
-  const { metrics, isLoading } = useMetrics();
+  const { metrics, isLoading, filters } = useMetrics();
 
   if (isLoading || !metrics) {
     return (
@@ -75,7 +76,9 @@ export function RegionWiseDistribution() {
     <Card className="flex flex-col p-0">
       <CardHeader className="items-center p-0">
         <CardTitle>Region Wise Spends</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {formatDateRange(filters?.start_date, filters?.end_date)}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer

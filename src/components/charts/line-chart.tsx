@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
@@ -18,6 +17,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useMetrics } from "@/context/metrics-context";
+import { formatDateRange } from "@/lib/utils";
 
 export const description = "A line chart";
 
@@ -29,7 +29,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function SpendsTrendGraph() {
-  const { metrics, isLoading } = useMetrics();
+  const { metrics, isLoading, filters } = useMetrics();
 
   if (isLoading) {
     return <p>Loading Metrics</p>;
@@ -43,7 +43,9 @@ export function SpendsTrendGraph() {
     <Card className="p-0">
       <CardHeader className="p-0">
         <CardTitle>Cost Consumption Trend</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {formatDateRange(filters?.start_date, filters?.end_date)}
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -85,10 +87,10 @@ export function SpendsTrendGraph() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm p-0">
         <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this date <TrendingUp className="h-4 w-4" />
+          Understand the trend of cost consumption
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 dates
+          Showing total cost for the last period
         </div>
       </CardFooter>
     </Card>
