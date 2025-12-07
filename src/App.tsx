@@ -20,7 +20,7 @@ function DashboardContent() {
   return (
     <DashboardLayout>
       <>
-        <div className="flex items-center gap-2 w-full justify-between">
+        <div className="flex items-end gap-2 w-full justify-between">
           <div className="">
             <TypographyH3 className="leading-none font-medium">
               Overall Total Spendings
@@ -29,6 +29,7 @@ function DashboardContent() {
               {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
             </TypographyH1>
           </div>
+
           <div className="flex items-end gap-2">
             <DateRangeFilter />
             <RegionFilterDropdown />
