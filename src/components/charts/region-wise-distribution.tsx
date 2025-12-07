@@ -58,7 +58,7 @@ export function RegionWiseDistribution() {
   return (
     <Card className="flex flex-col p-0">
       <CardHeader className="items-center p-0">
-        <CardTitle>Company Wise Spends</CardTitle>
+        <CardTitle>Region Wise Spends</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
