@@ -57,7 +57,7 @@ export function RegionWiseDistribution() {
   const chartData =
     metrics.region_wise_spends?.map((spend) => ({
       country: regionToNameMap[spend.region] || spend.region,
-      spends: spend.spends,
+      spends: spend.total_spends,
       fill:
         countryToColorMap[regionToNameMap[spend.region] || spend.region] ||
         "#ccc",

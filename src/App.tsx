@@ -5,6 +5,7 @@ import ChartsSection from "./components/sections/charts-section";
 import { ThemeProvider } from "./context/theme-context";
 import { MetricsProvider, useMetrics } from "./context/metrics-context";
 import { ModelWiseBarGraph } from "./components/charts/model-wise-bar-graph";
+import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
 
 function DashboardContent() {
   const { metrics } = useMetrics();
@@ -28,6 +29,8 @@ function DashboardContent() {
         </div>
 
         <ChartsSection />
+
+        <CompanyWiseSpends />
       </>
     </DashboardLayout>
   );
@@ -38,7 +41,7 @@ function App() {
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <MetricsProvider
         defaultFilters={{
-          regions: ["JP", "EU", "US"],
+          regions: [],
           start_date: "2024-01-01",
           end_date: "2024-03-08",
         }}

@@ -19,6 +19,14 @@ export type KpiMetricsResponse = {
     model: string;
     total_cost: number;
   }[];
+  region_wise_spends: {
+    region: string;
+    total_spends: number;
+  }[];
+  company_wise_spends: {
+    company: string;
+    total_spends: number;
+  }[];
 };
 
 export type RequestResponse<T> = {
