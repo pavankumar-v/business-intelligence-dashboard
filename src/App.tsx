@@ -8,7 +8,6 @@ import { ModelWiseBarGraph } from "./components/charts/model-wise-bar-graph";
 import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
 import { RegionFilterDropdown } from "./components/filters/region-filter-dropdown";
 import { DateRangeFilter } from "./components/filters/date-range-filter";
-import { FileDropzone } from "./components/transactions-upload/file-dropzon";
 import { Toaster } from "sonner";
 
 function DashboardContent() {
@@ -23,7 +22,6 @@ function DashboardContent() {
     <DashboardLayout>
       <>
         <Toaster />
-        <FileDropzone />
         <div className="flex items-end gap-2 w-full justify-between">
           <div className="">
             <TypographyH3 className="leading-none font-medium">
