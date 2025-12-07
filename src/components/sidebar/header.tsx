@@ -17,10 +17,10 @@ const Header = () => {
         </div>
 
         <div className="flex gap-2 items-center justify-between">
-          <Button variant="safe">
+          {/* <Button variant="safe">
             <Upload />
             Upload Transactions
-          </Button>
+          </Button> */}
           <ModeToggle />
         </div>
       </div>

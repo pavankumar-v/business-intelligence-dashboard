@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload, XIcon, CheckCircle2, Loader2 } from "lucide-react";
+import { Upload, XIcon, Loader2 } from "lucide-react";
 import prettyBytes from "pretty-bytes";
 import { ErrorCode } from "react-dropzone";
 import { useForm } from "react-hook-form";
@@ -37,9 +37,16 @@ import {
   FileListName,
   FileListSize,
 } from "@/components/ui/file-list";
-import { Card } from "../ui/card";
-import { TypographyH3 } from "../ui/typography";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { uploadCsv } from "@/services/metrics.service";
+import { TypographyH3 } from "../ui/typography";
 
 // 10 MB max file size
 const MAX_FILE_SIZE = 10e6;
@@ -59,7 +66,7 @@ const FormSchema = z.object({
 
 export function CsvUploadForm() {
   const [isUploading, setIsUploading] = useState(false);
-  const [jobId, setJobId] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -79,27 +86,32 @@ export function CsvUploadForm() {
     }
 
     setIsUploading(true);
-    setJobId(null);
 
     try {
       const response = await uploadCsv(data.transactions, data.users);
 
       toast.success(response.message || "Files uploaded successfully!", {
-        description: `Job ID: ${response.data.job_id}`,
+        description:
+          "Your CSV files have been uploaded and are being processed.",
         position: "top-center",
+        duration: Infinity, // Don't auto close
       });
 
-      setJobId(response.data.job_id);
-
-      // Reset form
+      // Reset form and close modal
       form.reset();
-    } catch (error: any) {
+      setOpen(false);
+    } catch (error) {
       console.error("Upload error:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An error occurred while uploading files.";
+      const responseMessage = (
+        error as { response?: { data?: { message?: string } } }
+      )?.response?.data?.message;
+
       toast.error("Upload failed", {
-        description:
-          error.response?.data?.message ||
-          error.message ||
-          "An error occurred while uploading files.",
+        description: responseMessage || errorMessage,
         position: "top-center",
       });
     } finally {
@@ -112,238 +124,267 @@ export function CsvUploadForm() {
   };
 
   return (
-    <Card className="bg-background">
-      <TypographyH3 indicatorColor="bg-accent-indicator-purple" withIndicator>
-        Upload Transactions & Users
-      </TypographyH3>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-2xl space-y-6"
-        >
-          {/* Transactions CSV Upload */}
-          <Dropzone
-            maxSize={MAX_FILE_SIZE}
-            accept={{ "text/csv": [".csv"] }}
-            multiple={false}
-            onDropAccepted={(acceptedFiles) => {
-              if (acceptedFiles[0]) {
-                form.setValue("transactions", acceptedFiles[0]);
-              }
-            }}
-            onDropRejected={(fileRejections) => {
-              fileRejections.forEach((fileRejection) => {
-                if (
-                  fileRejection.errors.some(
-                    (err) => err.code === ErrorCode.FileTooLarge
-                  )
-                ) {
-                  toast.error("File size too large.", {
-                    description: `File '${
-                      fileRejection.file.name
-                    }' exceeds ${prettyBytes(MAX_FILE_SIZE)}.`,
-                  });
-                } else if (
-                  fileRejection.errors.some(
-                    (err) => err.code === ErrorCode.FileInvalidType
-                  )
-                ) {
-                  toast.error("Invalid file type.", {
-                    description: "Only CSV files are allowed.",
-                  });
-                }
-              });
-            }}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Upload className="mr-2 h-4 w-4" />
+          Upload Transactions
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl rounded-2xl">
+        <DialogHeader>
+          <DialogTitle className="mb-2">
+            <TypographyH3 withIndicator>
+              Upload Transactions & Users
+            </TypographyH3>
+          </DialogTitle>
+          <DialogDescription>
+            Upload your transactions and users CSV files to process the data.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-6"
           >
-            {({ maxSize }) => (
-              <FormField
-                control={form.control}
-                name="transactions"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Transactions CSV</FormLabel>
-                    <DropzoneZone className="flex justify-center border">
-                      <FormControl>
-                        <DropzoneInput
-                          disabled={field.disabled || isUploading}
-                          name={field.name}
-                          onBlur={field.onBlur}
-                          ref={field.ref}
-                        />
-                      </FormControl>
-                      <div className="flex items-center gap-6">
-                        <Upload />
-                        <div className="grid gap-0.5">
-                          <DropzoneTitle>
-                            Browse to upload transactions file
-                          </DropzoneTitle>
-                          <DropzoneDescription>
-                            {`Maximum file size: ${prettyBytes(maxSize ?? 0)}`}
-                          </DropzoneDescription>
-                        </div>
-                      </div>
-                    </DropzoneZone>
-                    <FormDescription>
-                      Drag and drop is supported.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-          </Dropzone>
-
-          {form.watch("transactions") && (
-            <FileList>
-              <FileListItem>
-                <FileListHeader>
-                  <FileListIcon />
-                  <FileListInfo>
-                    <FileListName>
-                      {form.watch("transactions")!.name}
-                    </FileListName>
-                    <FileListDescription>
-                      <FileListSize>
-                        {form.watch("transactions")!.size}
-                      </FileListSize>
-                    </FileListDescription>
-                  </FileListInfo>
-                  <FileListAction onClick={() => removeFile("transactions")}>
-                    <XIcon />
-                    <span className="sr-only">Remove</span>
-                  </FileListAction>
-                </FileListHeader>
-              </FileListItem>
-            </FileList>
-          )}
-
-          {/* Users CSV Upload */}
-          <Dropzone
-            maxSize={MAX_FILE_SIZE}
-            accept={{ "text/csv": [".csv"] }}
-            multiple={false}
-            onDropAccepted={(acceptedFiles) => {
-              if (acceptedFiles[0]) {
-                form.setValue("users", acceptedFiles[0]);
-              }
-            }}
-            onDropRejected={(fileRejections) => {
-              fileRejections.forEach((fileRejection) => {
-                if (
-                  fileRejection.errors.some(
-                    (err) => err.code === ErrorCode.FileTooLarge
-                  )
-                ) {
-                  toast.error("File size too large.", {
-                    description: `File '${
-                      fileRejection.file.name
-                    }' exceeds ${prettyBytes(MAX_FILE_SIZE)}.`,
+            {/* Side by side dropzones */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Transactions CSV Upload */}
+              <Dropzone
+                maxSize={MAX_FILE_SIZE}
+                accept={{ "text/csv": [".csv"] }}
+                multiple={false}
+                onDropAccepted={(acceptedFiles) => {
+                  if (acceptedFiles[0]) {
+                    form.setValue("transactions", acceptedFiles[0]);
+                  }
+                }}
+                onDropRejected={(fileRejections) => {
+                  fileRejections.forEach((fileRejection) => {
+                    if (
+                      fileRejection.errors.some(
+                        (err) => err.code === ErrorCode.FileTooLarge
+                      )
+                    ) {
+                      toast.error("File size too large.", {
+                        description: `File '${
+                          fileRejection.file.name
+                        }' exceeds ${prettyBytes(MAX_FILE_SIZE)}.`,
+                        position: "top-center",
+                      });
+                    } else if (
+                      fileRejection.errors.some(
+                        (err) => err.code === ErrorCode.FileInvalidType
+                      )
+                    ) {
+                      toast.error("Invalid file type.", {
+                        description: "Only CSV files are allowed.",
+                        position: "top-center",
+                      });
+                    }
                   });
-                } else if (
-                  fileRejection.errors.some(
-                    (err) => err.code === ErrorCode.FileInvalidType
-                  )
-                ) {
-                  toast.error("Invalid file type.", {
-                    description: "Only CSV files are allowed.",
-                  });
-                }
-              });
-            }}
-          >
-            {({ maxSize }) => (
-              <FormField
-                control={form.control}
-                name="users"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Users CSV</FormLabel>
-                    <DropzoneZone className="flex justify-center border">
-                      <FormControl>
-                        <DropzoneInput
-                          disabled={field.disabled || isUploading}
-                          name={field.name}
-                          onBlur={field.onBlur}
-                          ref={field.ref}
-                        />
-                      </FormControl>
-                      <div className="flex items-center gap-6">
-                        <Upload />
-                        <div className="grid gap-0.5">
-                          <DropzoneTitle>
-                            Browse to upload users file
-                          </DropzoneTitle>
-                          <DropzoneDescription>
-                            {`Maximum file size: ${prettyBytes(maxSize ?? 0)}`}
-                          </DropzoneDescription>
-                        </div>
-                      </div>
-                    </DropzoneZone>
-                    <FormDescription>
-                      Drag and drop is supported.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                }}
+              >
+                {({ maxSize }) => (
+                  <FormField
+                    control={form.control}
+                    name="transactions"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Transactions CSV</FormLabel>
+                        <DropzoneZone className="flex justify-center border min-h-[120px]">
+                          <FormControl>
+                            <DropzoneInput
+                              disabled={field.disabled || isUploading}
+                              name={field.name}
+                              onBlur={field.onBlur}
+                              ref={field.ref}
+                            />
+                          </FormControl>
+                          <div className="flex flex-col items-center gap-3">
+                            <Upload className="h-8 w-8" />
+                            <div className="grid gap-0.5 text-center">
+                              <DropzoneTitle className="text-sm">
+                                Drop file here
+                              </DropzoneTitle>
+                              <DropzoneDescription className="text-xs">
+                                {`Max: ${prettyBytes(maxSize ?? 0)}`}
+                              </DropzoneDescription>
+                            </div>
+                          </div>
+                        </DropzoneZone>
+                        <FormDescription className="text-xs">
+                          Drag and drop or click to browse
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
-            )}
-          </Dropzone>
+              </Dropzone>
 
-          {form.watch("users") && (
-            <FileList>
-              <FileListItem>
-                <FileListHeader>
-                  <FileListIcon />
-                  <FileListInfo>
-                    <FileListName>{form.watch("users")!.name}</FileListName>
-                    <FileListDescription>
-                      <FileListSize>{form.watch("users")!.size}</FileListSize>
-                    </FileListDescription>
-                  </FileListInfo>
-                  <FileListAction onClick={() => removeFile("users")}>
-                    <XIcon />
-                    <span className="sr-only">Remove</span>
-                  </FileListAction>
-                </FileListHeader>
-              </FileListItem>
-            </FileList>
-          )}
+              {/* Users CSV Upload */}
+              <Dropzone
+                maxSize={MAX_FILE_SIZE}
+                accept={{ "text/csv": [".csv"] }}
+                multiple={false}
+                onDropAccepted={(acceptedFiles) => {
+                  if (acceptedFiles[0]) {
+                    form.setValue("users", acceptedFiles[0]);
+                  }
+                }}
+                onDropRejected={(fileRejections) => {
+                  fileRejections.forEach((fileRejection) => {
+                    if (
+                      fileRejection.errors.some(
+                        (err) => err.code === ErrorCode.FileTooLarge
+                      )
+                    ) {
+                      toast.error("File size too large.", {
+                        description: `File '${
+                          fileRejection.file.name
+                        }' exceeds ${prettyBytes(MAX_FILE_SIZE)}.`,
+                        position: "top-center",
+                      });
+                    } else if (
+                      fileRejection.errors.some(
+                        (err) => err.code === ErrorCode.FileInvalidType
+                      )
+                    ) {
+                      toast.error("Invalid file type.", {
+                        description: "Only CSV files are allowed.",
+                        position: "top-center",
+                      });
+                    }
+                  });
+                }}
+              >
+                {({ maxSize }) => (
+                  <FormField
+                    control={form.control}
+                    name="users"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Users CSV</FormLabel>
+                        <DropzoneZone className="flex justify-center border min-h-[120px]">
+                          <FormControl>
+                            <DropzoneInput
+                              disabled={field.disabled || isUploading}
+                              name={field.name}
+                              onBlur={field.onBlur}
+                              ref={field.ref}
+                            />
+                          </FormControl>
+                          <div className="flex flex-col items-center gap-3">
+                            <Upload className="h-8 w-8" />
+                            <div className="grid gap-0.5 text-center">
+                              <DropzoneTitle className="text-sm">
+                                Drop file here
+                              </DropzoneTitle>
+                              <DropzoneDescription className="text-xs">
+                                {`Max: ${prettyBytes(maxSize ?? 0)}`}
+                              </DropzoneDescription>
+                            </div>
+                          </div>
+                        </DropzoneZone>
+                        <FormDescription className="text-xs">
+                          Drag and drop or click to browse
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </Dropzone>
+            </div>
 
-          {/* Success Message */}
-          {jobId && (
-            <div className="rounded-lg border border-green-500 bg-green-50 dark:bg-green-950 p-4">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
-                <div className="flex-1">
-                  <h4 className="font-semibold text-green-900 dark:text-green-100">
-                    Upload Successful
-                  </h4>
-                  <p className="mt-1 text-sm text-green-700 dark:text-green-300">
-                    Your files have been uploaded and are being processed.
-                  </p>
-                  <p className="mt-2 font-mono text-xs text-green-800 dark:text-green-200">
-                    Job ID: {jobId}
-                  </p>
+            {/* File Lists */}
+            {(form.watch("transactions") || form.watch("users")) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Transactions File List */}
+                <div>
+                  {form.watch("transactions") && (
+                    <FileList>
+                      <FileListItem>
+                        <FileListHeader>
+                          <FileListIcon />
+                          <FileListInfo>
+                            <FileListName>
+                              {form.watch("transactions")!.name}
+                            </FileListName>
+                            <FileListDescription>
+                              <FileListSize>
+                                {form.watch("transactions")!.size}
+                              </FileListSize>
+                            </FileListDescription>
+                          </FileListInfo>
+                          <FileListAction
+                            onClick={() => removeFile("transactions")}
+                          >
+                            <XIcon />
+                            <span className="sr-only">Remove</span>
+                          </FileListAction>
+                        </FileListHeader>
+                      </FileListItem>
+                    </FileList>
+                  )}
+                </div>
+
+                {/* Users File List */}
+                <div>
+                  {form.watch("users") && (
+                    <FileList>
+                      <FileListItem>
+                        <FileListHeader>
+                          <FileListIcon />
+                          <FileListInfo>
+                            <FileListName>
+                              {form.watch("users")!.name}
+                            </FileListName>
+                            <FileListDescription>
+                              <FileListSize>
+                                {form.watch("users")!.size}
+                              </FileListSize>
+                            </FileListDescription>
+                          </FileListInfo>
+                          <FileListAction onClick={() => removeFile("users")}>
+                            <XIcon />
+                            <span className="sr-only">Remove</span>
+                          </FileListAction>
+                        </FileListHeader>
+                      </FileListItem>
+                    </FileList>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
-
-          <Button type="submit" disabled={isUploading}>
-            {isUploading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Uploading...
-              </>
-            ) : (
-              <>
-                Upload
-                <Upload className="ml-2 h-4 w-4" />
-              </>
             )}
-          </Button>
-        </form>
-      </Form>
-    </Card>
+
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+                disabled={isUploading}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isUploading}>
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    Upload
+                    <Upload className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
