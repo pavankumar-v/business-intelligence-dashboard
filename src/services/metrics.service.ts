@@ -27,6 +27,10 @@ export type KpiMetricsResponse = {
     company: string;
     total_spends: number;
   }[];
+  max_date_range: {
+    min_date: string;
+    max_date: string;
+  };
 };
 
 export type RequestResponse<T> = {

@@ -7,6 +7,7 @@ import { MetricsProvider, useMetrics } from "./context/metrics-context";
 import { ModelWiseBarGraph } from "./components/charts/model-wise-bar-graph";
 import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
 import { RegionFilterDropdown } from "./components/filters/region-filter-dropdown";
+import { DateRangeFilter } from "./components/filters/date-range-filter";
 
 function DashboardContent() {
   const { metrics } = useMetrics();
@@ -24,11 +25,14 @@ function DashboardContent() {
             <TypographyH3 className="leading-none font-medium">
               Overall Total Spendings
             </TypographyH3>
-            <TypographyH1 className="text-5xl font-medium ">
+            <TypographyH1 className="text-5xl font-medium mt-2">
               {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
             </TypographyH1>
           </div>
-          <RegionFilterDropdown />
+          <div className="flex items-end gap-2">
+            <DateRangeFilter />
+            <RegionFilterDropdown />
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row w-full gap-2">
