@@ -9,6 +9,7 @@ import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
 import { RegionFilterDropdown } from "./components/filters/region-filter-dropdown";
 import { DateRangeFilter } from "./components/filters/date-range-filter";
 import { Toaster } from "sonner";
+import { CsvUploadForm } from "./components/transactions-upload";
 
 function DashboardContent() {
   const { metrics } = useMetrics();
@@ -22,6 +23,7 @@ function DashboardContent() {
     <DashboardLayout>
       <>
         <Toaster />
+        <CsvUploadForm />
         <div className="flex items-end gap-2 w-full justify-between">
           <div className="">
             <TypographyH3 className="leading-none font-medium">

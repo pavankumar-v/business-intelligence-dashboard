@@ -60,3 +60,36 @@ export async function kpiMetrics(filter: MetricsFilter) {
 
   return res.data.data;
 }
+
+export type UploadCsvResponse = {
+  job_id: string;
+};
+
+export async function uploadCsv(
+  transactionsCsv: File,
+  usersCsv: File
+): Promise<RequestResponse<UploadCsvResponse>> {
+  // Validate file types
+  if (!transactionsCsv.name.endsWith(".csv")) {
+    throw new Error("Transactions file must be a CSV file");
+  }
+  if (!usersCsv.name.endsWith(".csv")) {
+    throw new Error("Users file must be a CSV file");
+  }
+
+  const formData = new FormData();
+  formData.append("transactions", transactionsCsv);
+  formData.append("users", usersCsv);
+
+  const res = await api.post<RequestResponse<UploadCsvResponse>>(
+    "/upload-csv",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return res.data;
+}
