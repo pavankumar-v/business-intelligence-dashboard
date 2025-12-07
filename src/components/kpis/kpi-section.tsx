@@ -1,9 +1,9 @@
 import { BotMessageSquare, Coins, User } from "lucide-react";
 import { TypographyH3, TypographyMuted } from "../ui/typography";
 import KPICard from "./kpi-card";
-import claudeLogo from "../../assets/claude.png";
 import { Card } from "../ui/card";
 import { useMetrics } from "@/context/metrics-context";
+import ModelLogo from "../utils/model-logo";
 
 const KpiSection = () => {
   const { metrics } = useMetrics();
@@ -20,11 +20,7 @@ const KpiSection = () => {
         >
           <div className="flex flex-col">
             <div className="flex items-center gap-2 relative capitalize">
-              <img
-                src={claudeLogo}
-                alt="Claude"
-                className="w-9 h-9 left-[-14px] top-[-5px] rounded-md bg-accent p-2"
-              />
+              <ModelLogo name={metrics?.highest_model_used || ""} />
               <span className="text-[2.2rem] font-semibold text-text">
                 {metrics?.highest_model_used}
               </span>
