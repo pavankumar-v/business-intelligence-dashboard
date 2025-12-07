@@ -71,12 +71,12 @@
   --sidebar-ring: oklch(0.623 0.214 259.815);
 
   /* Country colors for charts */
-  --color-japan: oklch(0.7 0.3 15);  /* Vivid Red */
-  --color-india: oklch(0.8 0.25 45);  /* Saffron Orange */
-  --color-united-states: oklch(0.65 0.28 240);  /* Bright Blue */
-  --color-european-union: oklch(0.75 0.25 290);  /* Rich Purple */
-  --color-canada: oklch(0.7 0.25 0);  /* Maple Red */
-  --color-australia: oklch(0.8 0.2 85);  /* Sunny Yellow */
+  --color-japan: oklch(0.603 0.2347 26.99);  /* Vivid Red */
+  --color-india: oklch(0.698 0.200272 41.4906);  /* Saffron Orange */
+  --color-united-states: oklch(0.2878 0.1994 264.05);  /* Bright Blue */
+  --color-european-union: oklch(0.3708 0.1731 262.12);  /* Rich Purple */
+  --color-canada: oklch(0.4526 0.1639 25.57);  /* Maple Red */
+  --color-australia: oklch(0.2878 0.1994 264.05);  /* Sunny Yellow */
 }
 
 .dark {
