@@ -19,6 +19,10 @@ export type KpiMetricsResponse = {
     date: string;
     cost: number;
   }[];
+  region_wise_spends: {
+    region: string;
+    spends: number;
+  }[];
 };
 
 export type RequestResponse<T> = {
