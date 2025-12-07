@@ -6,7 +6,7 @@ import { TypographyH3 } from "../ui/typography";
 import { Skeleton } from "../ui/skeleton";
 
 const ChartsSection = () => {
-  const { metrics, isLoading } = useMetrics();
+  const { isLoading, metrics } = useMetrics();
 
   return (
     <div className="flex flex-col lg:flex-row w-full gap-2">
@@ -20,7 +20,7 @@ const ChartsSection = () => {
         ) : !metrics ? (
           <p>Error Loading Metrics</p>
         ) : (
-          <SpendsTrendGraph chartData={metrics.kips?.spends_trend} />
+          <SpendsTrendGraph />
         )}
       </Card>
 

@@ -18,8 +18,10 @@ function DashboardContent() {
   return (
     <DashboardLayout>
       <>
-        <TypographyH3 className="leading-none">Total Spendings</TypographyH3>
-        <TypographyH1 className="">
+        <TypographyH3 className="leading-none font-medium">
+          Overall Total Spendings
+        </TypographyH3>
+        <TypographyH1 className="text-5xl font-medium ">
           {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
         </TypographyH1>
 
