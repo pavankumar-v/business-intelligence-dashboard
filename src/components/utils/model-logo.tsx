@@ -7,7 +7,7 @@ const ModelLogo = ({ name }: { name: string }) => {
       <img
         src={getLogo(name.toLocaleLowerCase())}
         alt={name}
-        className="w-9 h-9 left-[-14px] top-[-5px] rounded-md bg-accent p-2"
+        className="w-9 h-9 left-[-14px] top-[-5px] rounded-md bg-accent p-2 dark:bg-gray-200"
       />
     </div>
   );
