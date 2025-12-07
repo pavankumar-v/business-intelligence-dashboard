@@ -6,6 +6,7 @@ import { ThemeProvider } from "./context/theme-context";
 import { MetricsProvider, useMetrics } from "./context/metrics-context";
 import { ModelWiseBarGraph } from "./components/charts/model-wise-bar-graph";
 import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
+import { RegionFilterDropdown } from "./components/filters/region-filter-dropdown";
 
 function DashboardContent() {
   const { metrics } = useMetrics();
@@ -18,12 +19,17 @@ function DashboardContent() {
   return (
     <DashboardLayout>
       <>
-        <TypographyH3 className="leading-none font-medium">
-          Overall Total Spendings
-        </TypographyH3>
-        <TypographyH1 className="text-5xl font-medium ">
-          {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
-        </TypographyH1>
+        <div className="flex items-center gap-2 w-full justify-between">
+          <div className="">
+            <TypographyH3 className="leading-none font-medium">
+              Overall Total Spendings
+            </TypographyH3>
+            <TypographyH1 className="text-5xl font-medium ">
+              {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
+            </TypographyH1>
+          </div>
+          <RegionFilterDropdown />
+        </div>
 
         <div className="flex flex-col lg:flex-row w-full gap-2">
           <KpiSection />
