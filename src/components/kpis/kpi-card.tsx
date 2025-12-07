@@ -30,7 +30,7 @@ const KPICard = ({
       </CardTitle>
       <div className="p-0 pt-2">
         {loading ? (
-          <Skeleton className="h-[32px] w-[80px] rounded-md" />
+          <Skeleton className="h-[76px] w-[300px] rounded-xl" />
         ) : children ? (
           children
         ) : (
