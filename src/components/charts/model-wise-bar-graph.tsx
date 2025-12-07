@@ -48,7 +48,7 @@ export function ModelWiseBarGraph() {
       </CardHeader>
       <CardContent className="p-0">
         {isLoading ? (
-          <Skeleton className="w-full h-[400px] rounded-xl" />
+          <Skeleton className="w-full h-[200px] rounded-xl" />
         ) : !metrics ? (
           <p>Error Loading Metrics</p>
         ) : (
