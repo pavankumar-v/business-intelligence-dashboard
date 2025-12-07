@@ -23,7 +23,7 @@ function DashboardContent() {
 
         <KpiSection />
 
-        <ChartsSection spends_trend={metrics?.spends_trend ?? []} />
+        <ChartsSection />
       </>
     </DashboardLayout>
   );
@@ -32,7 +32,13 @@ function DashboardContent() {
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <MetricsProvider>
+      <MetricsProvider
+        defaultFilters={{
+          regions: [],
+          start_date: "2024-01-01",
+          end_date: "2024-02-29",
+        }}
+      >
         <DashboardContent />
       </MetricsProvider>
     </ThemeProvider>
