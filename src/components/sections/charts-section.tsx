@@ -1,18 +1,12 @@
+import { useMetrics } from "@/context/metrics-context";
 import { ChartLineDefault } from "../charts/line-chart";
 import { RegionWiseDistribution } from "../charts/region-wise-distribution";
 import { Card } from "../ui/card";
 import { TypographyH3 } from "../ui/typography";
+import { Skeleton } from "../ui/skeleton";
 
-const ChartsSection = ({
-  spends_trend,
-}: {
-  spends_trend:
-    | {
-        date: string;
-        cost: number;
-      }[]
-    | [];
-}) => {
+const ChartsSection = () => {
+  const { metrics, isLoading } = useMetrics();
   return (
     <div className="flex gap-2 w-full">
       <Card className="w-[70%]">
@@ -20,7 +14,13 @@ const ChartsSection = ({
           Charts
         </TypographyH3>
 
-        <ChartLineDefault chartData={spends_trend} />
+        {isLoading ? (
+          <Skeleton className="w-full h-[400px] rounded-xl" />
+        ) : !metrics ? (
+          <p>Error Loading Metrics</p>
+        ) : (
+          <ChartLineDefault chartData={metrics.spends_trend} />
+        )}
       </Card>
       <Card>
         <TypographyH3 indicatorColor="bg-accent-indicator-purple" withIndicator>
