@@ -17,37 +17,39 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useMetrics } from "@/context/metrics-context";
 
 export const description = "A line chart";
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
-
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  cost: {
+    label: "cost",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
 
-export function ChartLineDefault() {
+export function SpendsTrendGraph() {
+  const { metrics, isLoading } = useMetrics();
+
+  if (isLoading) {
+    return <p>Loading Metrics</p>;
+  }
+
+  if (!metrics || !metrics.kpis) {
+    return <p>Error Loading Metrics</p>;
+  }
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Line Chart</CardTitle>
+    <Card className="p-0">
+      <CardHeader className="p-0">
+        <CardTitle>Cost Consumption Trend</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
+      <CardContent className="p-0">
+        <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart
             accessibilityLayer
-            data={chartData}
+            data={metrics.kpis.spends_trend}
             margin={{
               left: 12,
               right: 12,
@@ -55,32 +57,38 @@ export function ChartLineDefault() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => {
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
+              }}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="cost"
               type="natural"
-              stroke="var(--color-desktop)"
+              stroke="var(--color-cost)"
               strokeWidth={2}
               dot={false}
             />
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
+      <CardFooter className="flex-col items-start gap-2 text-sm p-0">
         <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Trending up by 5.2% this date <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
+          Showing total visitors for the last 6 dates
         </div>
       </CardFooter>
     </Card>

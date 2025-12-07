@@ -2,6 +2,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
 import { Upload } from "lucide-react";
+import { ModeToggle } from "../theme/mode-toggle";
 
 const Header = () => {
   return (
@@ -20,6 +21,7 @@ const Header = () => {
             <Upload />
             Upload Transactions
           </Button>
+          <ModeToggle />
         </div>
       </div>
     </header>

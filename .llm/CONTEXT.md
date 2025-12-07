@@ -10,7 +10,7 @@ Active Subscriber Utilization Rate - Percentage of active subscribers using the 
 
 4 Charts
 
-Spend Trend - Line chart (cost over time)
+Spend Trend - Line chart (cost over time) x-cost, y-date
 Cost Distribution By Model - Bar chart (cost per model)
 Regional Cost Distribution - Pie chart (cost by region)
 Company-wise Spend - Bar chart (top 10 companies by cost)

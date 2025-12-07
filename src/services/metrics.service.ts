@@ -7,13 +7,26 @@ export type MetricsFilter = {
 };
 
 export type KpiMetricsResponse = {
-  highest_model_used: string;
-  avg_spending_per_day: number;
-  costliest_model: string;
-  least_used_model: string;
-  avg_token_consumption_per_day: number;
-  model_efficiency: number;
-  active_subscriber_utilization_rate: number;
+  kpis: {
+    total_spendings: string;
+    heighest_model_used: string;
+    average_token_consumption: number;
+    average_per_day_spending: number;
+    active_sub_utilization: number;
+    spends_trend: { date: string; cost: number }[];
+  };
+  models_metrics: {
+    model: string;
+    total_cost: number;
+  }[];
+  region_wise_spends: {
+    region: string;
+    total_spends: number;
+  }[];
+  company_wise_spends: {
+    company: string;
+    total_spends: number;
+  }[];
 };
 
 export type RequestResponse<T> = {
@@ -22,12 +35,24 @@ export type RequestResponse<T> = {
 };
 
 export async function kpiMetrics(filter: MetricsFilter) {
+  console.log(filter);
+  let query = "";
+  if (filter.regions.length > 0) {
+    // ?region=EU&region=US
+    query = filter.regions.reduce((acc, region) => {
+      acc += `&regions=${region}`;
+      return acc;
+    }, query);
+  }
+
+  query += `&start_date=${filter.start_date}&end_date=${filter.end_date}`;
+
+  console.log(query);
   const res = await api.get<RequestResponse<KpiMetricsResponse>>(
-    "/metrics/kpis",
-    {
-      params: filter,
-    }
+    `/metrics/kpis?${query}`
   );
+
+  console.log(res.data);
 
   return res.data.data;
 }
