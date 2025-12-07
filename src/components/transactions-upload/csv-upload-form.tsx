@@ -2,8 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, XIcon, Loader2, UploadIcon } from "lucide-react";
-import prettyBytes from "pretty-bytes";
-import { ErrorCode } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -19,11 +17,8 @@ import {
 } from "@/components/ui/form";
 import {
   Dropzone,
-  DropzoneDescription,
   DropzoneGroup,
   DropzoneInput,
-  DropzoneTitle,
-  DropzoneUploadIcon,
   DropzoneZone,
 } from "@/components/ui/dropzone";
 import {
