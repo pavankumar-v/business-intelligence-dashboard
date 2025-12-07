@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/chart";
 import { TypographyH3 } from "../ui/typography";
 import { useMetrics } from "@/context/metrics-context";
+import { formatDateRange } from "@/lib/utils";
 
 export const description = "A bar chart with a label";
 
@@ -28,7 +28,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function CompanyWiseSpends() {
-  const { metrics, isLoading } = useMetrics();
+  const { metrics, isLoading, filters } = useMetrics();
 
   if (isLoading || !metrics) {
     return (
@@ -53,7 +53,9 @@ export function CompanyWiseSpends() {
       </TypographyH3>
       <CardHeader className="p-0">
         <CardTitle>Company Wise Spends</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {formatDateRange(filters?.start_date, filters?.end_date)}
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <ChartContainer config={chartConfig}>
@@ -93,10 +95,10 @@ export function CompanyWiseSpends() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this company <TrendingUp className="h-4 w-4" />
+          Understand the distribution of spends across companies
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 companys
+          Showing total spends for the last period
         </div>
       </CardFooter>
     </Card>

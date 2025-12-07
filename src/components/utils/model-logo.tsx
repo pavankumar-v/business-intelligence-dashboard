@@ -1,6 +1,6 @@
 import claudLogo from "@/assets/claude.png";
 import chatGpt from "@/assets/models/chatgpt.png";
-import { Circle, CircleDashed } from "lucide-react";
+import { CircleDashed } from "lucide-react";
 
 const ModelLogo = ({ name }: { name: string }) => {
   const logo = getLogo(name.toLocaleLowerCase());

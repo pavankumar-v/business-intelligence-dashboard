@@ -19,7 +19,7 @@ import {
 import { useMetrics } from "@/context/metrics-context";
 import { Skeleton } from "../ui/skeleton";
 import { TypographyH3 } from "../ui/typography";
-import { TrendingUp } from "lucide-react";
+import { formatDateRange } from "@/lib/utils";
 
 const chartConfig = {
   cost: {
@@ -29,7 +29,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ModelWiseBarGraph() {
-  const { metrics, isLoading } = useMetrics();
+  const { metrics, isLoading, filters } = useMetrics();
 
   const chartData =
     metrics?.models_metrics?.map((item) => ({
@@ -44,7 +44,9 @@ export function ModelWiseBarGraph() {
       </TypographyH3>
       <CardHeader className="p-0">
         <CardTitle>Model Wise Bar Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {formatDateRange(filters?.start_date, filters?.end_date)}
+        </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         {isLoading ? (
@@ -86,10 +88,10 @@ export function ModelWiseBarGraph() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm p-0">
         <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this date <TrendingUp className="h-4 w-4" />
+          Compare models to understand cost effectiveness
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 dates
+          Highest Model Vs Lowest Model
         </div>
       </CardFooter>
     </Card>
