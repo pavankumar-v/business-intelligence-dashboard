@@ -24,7 +24,7 @@ export type KpiMetricsResponse = {
     spends: number;
   }[];
   cost_distribution_by_model: {
-    mode: string;
+    model: string;
     cost: number;
   }[];
 };
