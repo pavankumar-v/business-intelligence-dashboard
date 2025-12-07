@@ -6,6 +6,9 @@ import { ThemeProvider } from "./context/theme-context";
 import { MetricsProvider, useMetrics } from "./context/metrics-context";
 import { ModelWiseBarGraph } from "./components/charts/model-wise-bar-graph";
 import { CompanyWiseSpends } from "./components/charts/company-wise-spends";
+import { RegionFilterDropdown } from "./components/filters/region-filter-dropdown";
+import { DateRangeFilter } from "./components/filters/date-range-filter";
+import { Toaster } from "sonner";
 
 function DashboardContent() {
   const { metrics } = useMetrics();
@@ -18,12 +21,22 @@ function DashboardContent() {
   return (
     <DashboardLayout>
       <>
-        <TypographyH3 className="leading-none font-medium">
-          Overall Total Spendings
-        </TypographyH3>
-        <TypographyH1 className="text-5xl font-medium ">
-          {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
-        </TypographyH1>
+        <Toaster />
+        <div className="flex items-end gap-2 w-full justify-between">
+          <div className="">
+            <TypographyH3 className="leading-none font-medium">
+              Overall Total Spendings
+            </TypographyH3>
+            <TypographyH1 className="text-5xl font-medium mt-2">
+              {USDollar.format(Number(metrics?.kpis?.total_spendings || 0))}
+            </TypographyH1>
+          </div>
+
+          <div className="flex items-end gap-2">
+            <DateRangeFilter />
+            <RegionFilterDropdown />
+          </div>
+        </div>
 
         <div className="flex flex-col lg:flex-row w-full gap-2">
           <KpiSection />

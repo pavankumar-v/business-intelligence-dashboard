@@ -24,7 +24,7 @@ import { TrendingUp } from "lucide-react";
 const chartConfig = {
   cost: {
     label: "cost",
-    color: "var(--color-green-500)",
+    color: "var(--color-chart-green)",
   },
 } satisfies ChartConfig;
 
@@ -71,7 +71,7 @@ export function ModelWiseBarGraph() {
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Bar dataKey="cost" fill="var(--color-green-500)" radius={8}>
+              <Bar dataKey="cost" fill="var(--color-chart-green)" radius={8}>
                 <LabelList
                   position="top"
                   offset={12}

@@ -23,7 +23,7 @@ export const description = "A bar chart with a label";
 const chartConfig = {
   total_spends: {
     label: "total_spends",
-    color: "var(--color-green-500)",
+    color: "var(--color-chart-green)",
   },
 } satisfies ChartConfig;
 
