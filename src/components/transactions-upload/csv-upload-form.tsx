@@ -46,6 +46,7 @@ import {
   TypographyMuted,
   TypographySmall,
 } from "../ui/typography";
+import { useMetrics } from "@/context/metrics-context";
 
 // 10 MB max file size
 const MAX_FILE_SIZE = 10e6;
@@ -66,6 +67,7 @@ const FormSchema = z.object({
 export function CsvUploadForm() {
   const [isUploading, setIsUploading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { refetch } = useMetrics();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -99,6 +101,11 @@ export function CsvUploadForm() {
       // Reset form and close modal
       form.reset();
       setOpen(false);
+
+      // Refetch metrics after 2 seconds
+      setTimeout(() => {
+        refetch();
+      }, 2000);
     } catch (error) {
       console.error("Upload error:", error);
       const errorMessage =
